@@ -30,7 +30,7 @@ fun App() {
             }
             AnimatedVisibility(showImage) {
                 Image(
-                    painterResource("compose-multiplatform.xml"),
+                    painterResource("sunny_anim.xml"),
                     null
                 )
             }
