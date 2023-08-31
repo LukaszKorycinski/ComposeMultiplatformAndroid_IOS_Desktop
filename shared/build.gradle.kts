@@ -1,9 +1,12 @@
+import com.github.gmazzo.gradle.plugins.BuildConfigSourceSet
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     kotlin("plugin.serialization") version "1.9.0"
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("com.github.gmazzo.buildconfig") version "3.1.0"
 }
 
 kotlin {
@@ -32,6 +35,8 @@ kotlin {
 
     sourceSets {
         val ktorVersion: String by project
+        val mokoVersion: String by project
+        val koinVersion: String by project
 
         val commonMain by getting {
             dependencies {
@@ -40,8 +45,17 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+                implementation("dev.icerock.moko:mvvm-core:$mokoVersion")
+                implementation("dev.icerock.moko:mvvm-compose:$mokoVersion")
+
+                implementation("io.insert-koin:koin-core:$koinVersion")
+                implementation("io.insert-koin:koin-test:$koinVersion")
             }
         }
         val androidMain by getting {
@@ -92,4 +106,9 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+}
+
+buildConfig {
+    buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
+    buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
 }
